@@ -1,0 +1,189 @@
+<div class="min-h-screen p-6 bg-gray-50">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center gap-3 mb-2">
+            <i class="fas fa-briefcase text-3xl text-blue-600"></i>
+            <h1 class="text-2xl font-bold text-gray-800">Job Portal Dashboard</h1>
+        </div>
+        <p class="text-gray-500 text-sm">Latest job listings</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm mb-1">Total Jobs</p>
+                    <p class="text-3xl font-bold text-gray-800">{{ totalJobs }}</p>
+                </div>
+                <i class="fas fa-briefcase text-4xl text-blue-500 opacity-80"></i>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm mb-1">Remote Positions</p>
+                    <p class="text-3xl font-bold text-gray-800">{{ remotePositions }}</p>
+                </div>
+                <i class="fas fa-globe text-4xl text-green-500 opacity-80"></i>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm mb-1">Posted Today</p>
+                    <p class="text-3xl font-bold text-gray-800">{{ postedToday }}</p>
+                </div>
+                <i class="fas fa-clock text-4xl text-purple-500 opacity-80"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-8 border border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                <input [(ngModel)]="searchQuery" (input)="onFilterChange()" type="text"
+                    placeholder="Search jobs by title or company..."
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+
+            <div class="relative">
+                <i class="fas fa-map-marker-alt absolute left-3 top-3.5 text-gray-400"></i>
+                <select [(ngModel)]="selectedLocation" (change)="onFilterChange()"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
+                    @for (loc of uniqueLocations; track loc) {
+                    <option [value]="loc">{{ loc }}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="relative">
+                <i class="fas fa-passport absolute left-3 top-3.5 text-gray-400"></i>
+                <select [(ngModel)]="selectedVisaType" (change)="onFilterChange()"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
+                    @for (visa of uniqueVisaTypes; track visa) {
+                    <option [value]="visa">{{ visa }}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="relative">
+                <i class="fas fa-globe absolute left-3 top-3.5 text-gray-400"></i>
+                <select [(ngModel)]="selectedSource" (change)="onFilterChange()"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
+                    @for (src of uniqueSources; track src) {
+                    <option [value]="src">{{ src }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content States -->
+    @if (isLoading) {
+    <div class="flex flex-col items-center justify-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+        <p class="text-gray-600">Loading jobs...</p>
+    </div>
+    } @else if (hasError) {
+    <div class="text-center py-16 text-red-600">
+        <i class="fas fa-exclamation-triangle text-5xl mb-4"></i>
+        <p class="text-xl">Failed to load jobs</p>
+        <button (click)="loadJobs()" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Try Again
+        </button>
+    </div>
+    } @else if (filteredJobs.length === 0) {
+    <div class="text-center py-16 text-gray-500">
+        <i class="fas fa-search text-5xl mb-4 opacity-50"></i>
+        <p class="text-xl">No jobs found</p>
+        <p class="mt-2">Try different filters or search terms</p>
+    </div>
+    } @else {
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-max">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job
+                            Title</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Company</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Posted</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Location</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visa
+                            Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Source</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Action</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @for (job of filteredJobs; track job.id; let i = $index) {
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ i + 1 }}</td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm font-medium text-gray-900">{{ job.title }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ job.company }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <i class="far fa-clock mr-1"></i>{{ job.postedTime }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span
+                                [ngClass]="[getLocationStyles(job.locationType).bg, getLocationStyles(job.locationType).text]"
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                                <i [ngClass]="getLocationStyles(job.locationType).icon" class="mr-1"></i>
+                                {{ job.locationType }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-wrap gap-1">
+                                @for (vs of job.visaStatus; track $index) {
+                                <span
+                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700">
+                                    {{ vs }}
+                                </span>
+                                }
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-2">
+                                <i [ngClass]="getSourceIconClass(job.source)" class="text-xl"></i>
+                                <span class="text-sm text-gray-600">{{ job.source }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <div class="flex items-center gap-3">
+                                <button (click)="applyJob(job)"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
+                                    Apply
+                                    <i class="fas fa-external-link-alt text-xs"></i>
+                                </button>
+
+                                <button (click)="toggleApplied(job)"
+                                    [ngClass]="job.applied ? 'text-green-600 hover:text-green-700' : 'text-gray-400 hover:text-gray-500'"
+                                    class="transition-colors p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    title="{{ job.applied ? 'Applied ✓ (click to undo)' : 'Mark as applied' }}">
+                                    <i [ngClass]="job.applied ? 'fas fa-check-circle' : 'far fa-circle'"
+                                        class="text-2xl"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    }
+</div>
