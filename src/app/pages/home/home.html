@@ -1,0 +1,143 @@
+<style>
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    @keyframes pulse-glow {
+
+        0%,
+        100% {
+            opacity: 0.15;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.25;
+            transform: scale(1.05);
+        }
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .animate-pulse-glow {
+        animation: pulse-glow 4s ease-in-out infinite;
+    }
+</style>
+
+<app-header></app-header>
+
+<div class="relative min-h-screen bg-gray-50">
+    <!-- Background Image -->
+    <div class="fixed inset-0 z-0">
+        <div
+            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80')] bg-cover bg-center bg-no-repeat">
+        </div>
+        <div class="absolute inset-0 bg-linear-to-b from-white/85 via-white/80 to-white/85"></div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-20 left-[10%] w-72 h-72 bg-blue-200/20 rounded-full blur-3xl animate-pulse-glow"></div>
+        <div class="absolute top-40 right-[15%] w-96 h-96 bg-purple-200/20 rounded-full blur-3xl animate-pulse-glow"
+            style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-32 left-[20%] w-80 h-80 bg-pink-200/20 rounded-full blur-3xl animate-pulse-glow"
+            style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <main class="relative min-h-screen flex items-center justify-center px-6 pt-24 pb-20">
+        <div class="max-w-6xl mx-auto text-center space-y-12">
+
+            <!-- Floating Badge -->
+            <div
+                class="inline-flex items-center gap-2 px-5 py-2 bg-white rounded-full shadow-lg border border-gray-200 text-sm font-medium text-gray-700 animate-float">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span>Over 50,000 opportunities listed today</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1
+                class="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-none text-gray-900">
+                JoblandsAI
+            </h1>
+
+            <h2
+                class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight text-gray-800">
+                Find Jobs That<br />
+                Match Your Dreams
+            </h2>
+
+            <!-- Subtitle -->
+            <p class="text-xl sm:text-2xl md:text-3xl font-light text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                Discover your next career move with AI-powered job matching.<br />
+                <span class="font-semibold text-gray-800">
+                    Visa-friendly • Fresh daily • Personalized for you
+                </span>
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-5 justify-center pt-8">
+                <a routerLink="/dashboard"
+                    class="group relative inline-flex items-center justify-center px-12 py-5 text-xl font-bold text-white bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-500 overflow-hidden">
+                    <span class="relative z-10 flex items-center gap-3">
+                        Explore Jobs Now
+                        <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </span>
+                </a>
+
+                <a (click)="onHowItWorks()"
+                    class="inline-flex items-center justify-center px-12 py-5 text-xl font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-full hover:border-blue-500 hover:text-blue-600 hover:shadow-xl transition-all duration-300">
+                    See How It Works
+                </a>
+            </div>
+
+            <!-- Feature Pills -->
+            <div class="flex flex-wrap justify-center gap-4 pt-12">
+                <div
+                    class="px-6 py-3 bg-white rounded-full shadow-md border border-gray-200 text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                        </path>
+                    </svg>
+                    AI-Powered Matching
+                </div>
+                <div
+                    class="px-6 py-3 bg-white rounded-full shadow-md border border-gray-200 text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    Real-Time Updates
+                </div>
+                <div
+                    class="px-6 py-3 bg-white rounded-full shadow-md border border-gray-200 text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z">
+                        </path>
+                    </svg>
+                    Visa Support
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<app-footer></app-footer>

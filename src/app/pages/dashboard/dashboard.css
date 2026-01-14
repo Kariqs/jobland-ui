@@ -1,0 +1,14 @@
+.job-title-cell {
+  max-width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-title-cell:hover {
+  white-space: normal;
+  overflow: visible;
+  background: white;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

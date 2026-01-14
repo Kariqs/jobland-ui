@@ -46,15 +46,15 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="relative">
                 <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
-                <input [(ngModel)]="searchQuery" (input)="onFilterChange()" type="text"
-                    placeholder="Search jobs by title or company..."
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input [(ngModel)]="searchQuery" (keyup.enter)="onSearchSubmit()" type="text"
+                    placeholder="Search by job title or company..."
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 text-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
             <div class="relative">
                 <i class="fas fa-map-marker-alt absolute left-3 top-3.5 text-gray-400"></i>
                 <select [(ngModel)]="selectedLocation" (change)="onFilterChange()"
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
+                    class="w-full pl-10 pr-4 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
                     @for (loc of uniqueLocations; track loc) {
                     <option [value]="loc">{{ loc }}</option>
                     }
@@ -64,7 +64,7 @@
             <div class="relative">
                 <i class="fas fa-passport absolute left-3 top-3.5 text-gray-400"></i>
                 <select [(ngModel)]="selectedVisaType" (change)="onFilterChange()"
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
+                    class="w-full pl-10 pr-4 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
                     @for (visa of uniqueVisaTypes; track visa) {
                     <option [value]="visa">{{ visa }}</option>
                     }
@@ -74,7 +74,7 @@
             <div class="relative">
                 <i class="fas fa-globe absolute left-3 top-3.5 text-gray-400"></i>
                 <select [(ngModel)]="selectedSource" (change)="onFilterChange()"
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
+                    class="w-full pl-10 pr-4 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
                     @for (src of uniqueSources; track src) {
                     <option [value]="src">{{ src }}</option>
                     }
@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <!-- Content States -->
+    <!-- Jobs Content -->
     @if (isLoading) {
     <div class="flex flex-col items-center justify-center py-20">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
@@ -93,15 +93,15 @@
     <div class="text-center py-16 text-red-600">
         <i class="fas fa-exclamation-triangle text-5xl mb-4"></i>
         <p class="text-xl">Failed to load jobs</p>
-        <button (click)="loadJobs()" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+        <button (click)="fetchJobs()" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
             Try Again
         </button>
     </div>
-    } @else if (filteredJobs.length === 0) {
+    } @else if (jobs.length === 0) {
     <div class="text-center py-16 text-gray-500">
         <i class="fas fa-search text-5xl mb-4 opacity-50"></i>
         <p class="text-xl">No jobs found</p>
-        <p class="mt-2">Try different filters or search terms</p>
+        <p class="mt-2">Try adjusting your search or filters</p>
     </div>
     } @else {
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
@@ -128,11 +128,12 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @for (job of filteredJobs; track job.id; let i = $index) {
+                    @for (job of jobs; track job.id; let i = $index) {
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ i + 1 }}</td>
                         <td class="px-6 py-4">
-                            <div class="text-sm font-medium text-gray-900">{{ job.title }}</div>
+                            <div class="text-sm font-medium text-gray-900 max-w-70 truncate" title="{{job.title}}">
+                                {{ job.title }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ job.company }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -157,9 +158,11 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center gap-2">
-                                <i [ngClass]="getSourceIconClass(job.source)" class="text-xl"></i>
-                                <span class="text-sm text-gray-600">{{ job.source }}</span>
+                            <div class="flex items-center gap-2 max-w-55">
+                                <i [ngClass]="getSourceIconClass(job.source)" class="text-xl shrink-0"></i>
+                                <span class="text-sm text-gray-600 truncate" title="{{ job.source }}">
+                                    {{ job.source }}
+                                </span>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
@@ -184,6 +187,23 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="mt-6 flex items-center justify-center gap-4 flex-wrap">
+        <button [disabled]="currentPage === 1 || isLoading" (click)="previousPage()"
+            class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            Previous
+        </button>
+
+        <span class="px-4 py-2 text-lg font-medium">
+            Page {{ currentPage }} {{ hasMore ? 'of many' : '' }}
+        </span>
+
+        <button [disabled]="!hasMore || isLoading" (click)="nextPage()"
+            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            Next
+        </button>
     </div>
     }
 </div>

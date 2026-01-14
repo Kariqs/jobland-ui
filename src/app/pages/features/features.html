@@ -1,0 +1,110 @@
+<div class="relative min-h-screen bg-gray-50 pt-24 pb-20">
+    <!-- Background Image -->
+    <div class="fixed inset-0 z-0">
+        <div
+            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1920&q=80')] bg-cover bg-center bg-no-repeat">
+        </div>
+        <div class="absolute inset-0 bg-linear-to-b from-white/85 via-white/80 to-white/85"></div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-20 left-[10%] w-72 h-72 bg-blue-200/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-40 right-[15%] w-96 h-96 bg-purple-200/20 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        <!-- Header Section -->
+        <div class="text-center mb-16 md:mb-24">
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-6">
+                How It Works
+            </h1>
+            <p class="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto">
+                Four simple steps to finding your dream job with AI-powered matching
+            </p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-6xl mx-auto">
+            @for (feature of features; track $index) {
+            <div
+                class="relative bg-white rounded-2xl shadow-lg border border-gray-200 p-8 md:p-10 hover:shadow-xl transition-all duration-300 group">
+                <!-- Step Number -->
+                <div
+                    class="absolute -top-6 -left-6 w-16 h-16 bg-linear-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <span class="text-2xl font-bold text-white">{{ feature.step }}</span>
+                </div>
+
+                <!-- Icon -->
+                <div class="mb-6 mt-4">
+                    <div
+                        class="w-16 h-16 bg-linear-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <!-- User Plus Icon -->
+                        @if (feature.icon === 'user-plus') {
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                            </path>
+                        </svg>
+                        }
+
+                        <!-- Settings Icon -->
+                        @if (feature.icon === 'settings') {
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        }
+
+                        <!-- Sparkles Icon -->
+                        @if (feature.icon === 'sparkles') {
+                        <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                            </path>
+                        </svg>
+                        }
+
+                        <!-- Send Icon -->
+                        @if (feature.icon === 'send') {
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                        }
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    {{ feature.title }}
+                </h3>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    {{ feature.description }}
+                </p>
+            </div>
+            }
+        </div>
+
+        <!-- CTA Section -->
+        <div class="text-center mt-16 md:mt-24">
+            <a routerLink="/signup"
+                class="inline-flex items-center justify-center px-12 py-5 text-xl font-bold text-white bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-500">
+                <span class="flex items-center gap-3">
+                    Get Started Today
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </span>
+            </a>
+            <p class="mt-6 text-gray-600">
+                Join thousands of job seekers finding their perfect match every day.
+            </p>
+        </div>
+    </div>
+</div>

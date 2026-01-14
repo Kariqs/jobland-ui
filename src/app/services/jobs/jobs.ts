@@ -5,11 +5,11 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface Job {
-  id: number;
+  id: string;
   title: string;
   company: string;
   postedTime: string;
-  locationType: 'Remote' | 'Hybrid' | 'Onsite';
+  locationType: 'Remote' | 'Hybrid' | 'Onsite' | 'Unknown';
   visaStatus: string[];
   source: string;
   applyUrl: string;
@@ -20,36 +20,38 @@ export interface JobResponse {
   success: boolean;
   count: number;
   jobs: Job[];
+  hasMore?: boolean;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class Jobs {
-  apiUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl; // e.g. 'http://localhost:3001/api/jobs'
+
   constructor(private http: HttpClient, private router: Router) {}
 
-  getJobs(): Observable<JobResponse> {
-    return this.http
-      .get<JobResponse>(this.apiUrl)
-      .pipe(catchError((error) => this.handleError(error)));
+  getJobs(query: string = '', page: number = 1): Observable<JobResponse> {
+    const params = new URLSearchParams();
+    if (query.trim()) params.append('query', query.trim());
+    params.append('page', page.toString());
+
+    const url = params.toString() ? `${this.apiUrl}?${params.toString()}` : this.apiUrl;
+
+    return this.http.get<JobResponse>(url).pipe(catchError((error) => this.handleError(error)));
   }
 
-  public handleError(error: HttpErrorResponse) {
+  private handleError(error: HttpErrorResponse) {
     if (error.status === 401) {
-      this.router.navigate(['login']);
+      this.router.navigate(['/login']);
     }
 
     let errorMsg = 'An unknown error occurred!';
-
-    if (error.error) {
-      if (error.error.message) {
-        errorMsg = error.error.message;
-      }
-      if (error.error.details) {
-        errorMsg += ` - ${error.error.details}`;
-      }
+    if (error.error?.message) {
+      errorMsg = error.error.message;
+      if (error.error.details) errorMsg += ` - ${error.error.details}`;
     }
+
     return throwError(() => new Error(errorMsg));
   }
 }
