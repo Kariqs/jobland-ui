@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="flex items-center justify-between h-16 md:h-20">
             <!-- Logo -->
-            <div class="flex items-center gap-3">
+            <div (click)="goHome()" class="flex items-center cursor-pointer gap-3">
                 <div
                     class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center font-bold text-white text-xl shadow-lg">
                     J
@@ -19,12 +19,12 @@
             </nav>
 
             <!-- Desktop Auth Buttons -->
-            <div class="hidden md:flex items-center gap-4">
-                <button class="px-5 py-2 text-gray-600 hover:text-gray-900 transition-colors">
+            <div class="hidden md:flex items-center  gap-4">
+                <button class="px-5 cursor-pointer py-2 text-gray-600 hover:text-gray-900 transition-colors">
                     Sign In
                 </button>
-                <button
-                    class="px-6 py-2.5 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all">
+                <button (click)="getStarted()"
+                    class="px-6 py-2.5 cursor-pointer bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all">
                     Get Started
                 </button>
             </div>
@@ -56,7 +56,7 @@
                     class="w-full py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                     Sign In
                 </button>
-                <button
+                <button (click)="getStarted()"
                     class="w-full py-3 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:shadow-lg transition-all">
                     Get Started
                 </button>
