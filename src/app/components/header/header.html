@@ -14,9 +14,8 @@
 
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center gap-10 text-gray-600">
-                <a href="#" class="hover:text-gray-900 transition-colors">Pricing</a>
-                <a href="#" class="hover:text-gray-900 transition-colors">Pricing</a>
-                <a href="#" class="hover:text-gray-900 transition-colors">About</a>
+                <a routerLink="#" class="hover:text-gray-900 transition-colors">Pricing</a>
+                <a routerLink="#" class="hover:text-gray-900 transition-colors">About</a>
             </nav>
 
             <!-- Desktop Auth Buttons -->
@@ -43,16 +42,14 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div *ngIf="isMenuOpen" class="md:hidden bg-white/95 border-t border-gray-200/50">
+    @if (isMenuOpen) {
+    <div class="md:hidden bg-white/95 border-t border-gray-200/50">
         <div class="px-6 py-8 space-y-6">
-            <a href="#" class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
-                For Job Seekers
-            </a>
-            <a href="#" class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
-                For Employers
-            </a>
-            <a href="#" class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
+            <a routerLink="#" class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
                 Pricing
+            </a>
+            <a routerLink="#" class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
+                About
             </a>
             <div class="pt-6 space-y-4">
                 <button
@@ -66,4 +63,5 @@
             </div>
         </div>
     </div>
+    }
 </header>
