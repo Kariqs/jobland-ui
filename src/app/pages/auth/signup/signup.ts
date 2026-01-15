@@ -24,6 +24,8 @@ export class Signup implements OnInit {
   totalSteps: number = 3;
   selectedPlan: string = 'free';
   isLoading: boolean = false;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   professions: ProfessionOption[] = [
     { value: 'software-engineer', label: 'Software Engineer' },
@@ -53,7 +55,6 @@ export class Signup implements OnInit {
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    // Get selected plan from query params if available
     this.route.queryParams.subscribe((params) => {
       if (params['plan']) {
         this.selectedPlan = params['plan'];
@@ -65,19 +66,20 @@ export class Signup implements OnInit {
 
   initializeForm(): void {
     this.signupForm = this.fb.group({
-      // Step 1: Basic Info
+      //Basic Info
       fullName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
 
-      // Step 2: Professional Info
+      //Professional Info
       profession: ['', Validators.required],
+      otherProfession: [''],
       experienceLevel: ['', Validators.required],
       currentLocation: ['', Validators.required],
       skills: [''],
 
-      // Step 3: Job Preferences
+      //Job Preferences
       desiredLocations: [''],
       salaryExpectation: [''],
       needsVisaSponsorship: [false],
@@ -87,15 +89,36 @@ export class Signup implements OnInit {
       // Terms
       agreeToTerms: [false, Validators.requiredTrue],
     });
+    
+    this.signupForm.get('profession')?.valueChanges.subscribe((value) => {
+      const otherProfessionControl = this.signupForm.get('otherProfession');
+      if (value === 'other') {
+        otherProfessionControl?.setValidators([Validators.required]);
+      } else {
+        otherProfessionControl?.clearValidators();
+      }
+      otherProfessionControl?.updateValueAndValidity();
+    });
   }
 
   get f() {
     return this.signupForm.controls;
   }
 
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  isProfessionOther(): boolean {
+    return this.f['profession'].value === 'other';
+  }
+
   nextStep(): void {
     if (this.currentStep === 1) {
-      // Validate Step 1 fields
       if (
         this.f['fullName'].invalid ||
         this.f['email'].invalid ||
@@ -105,19 +128,17 @@ export class Signup implements OnInit {
         this.markStepFieldsAsTouched(1);
         return;
       }
-
-      // Check if passwords match
       if (this.f['password'].value !== this.f['confirmPassword'].value) {
         return;
       }
     }
 
     if (this.currentStep === 2) {
-      // Validate Step 2 fields
       if (
         this.f['profession'].invalid ||
         this.f['experienceLevel'].invalid ||
-        this.f['currentLocation'].invalid
+        this.f['currentLocation'].invalid ||
+        (this.isProfessionOther() && this.f['otherProfession'].invalid)
       ) {
         this.markStepFieldsAsTouched(2);
         return;
@@ -145,6 +166,9 @@ export class Signup implements OnInit {
       this.f['profession'].markAsTouched();
       this.f['experienceLevel'].markAsTouched();
       this.f['currentLocation'].markAsTouched();
+      if (this.isProfessionOther()) {
+        this.f['otherProfession'].markAsTouched();
+      }
     }
   }
 
@@ -172,13 +196,4 @@ export class Signup implements OnInit {
     }, 2000);
   }
 
-  signInWithGoogle(): void {
-    console.log('Sign in with Google');
-    // Implement Google OAuth
-  }
-
-  signInWithLinkedIn(): void {
-    console.log('Sign in with LinkedIn');
-    // Implement LinkedIn OAuth
-  }
 }
