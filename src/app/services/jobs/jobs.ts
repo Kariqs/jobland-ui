@@ -27,7 +27,7 @@ export interface JobResponse {
   providedIn: 'root',
 })
 export class Jobs {
-  private apiUrl = environment.apiUrl; // e.g. 'http://localhost:3001/api/jobs'
+  private apiUrl = environment.apiUrl; 
 
   constructor(private http: HttpClient, private router: Router) {}
 

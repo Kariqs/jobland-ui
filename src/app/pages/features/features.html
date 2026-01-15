@@ -26,23 +26,24 @@
         </div>
 
         <!-- Features Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-6xl mx-auto">
-            @for (feature of features; track $index) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto">
+            @for (feature of features; track feature.step) {
             <div
-                class="relative bg-white rounded-2xl shadow-lg border border-gray-200 p-8 md:p-10 hover:shadow-xl transition-all duration-300 group">
-                <!-- Step Number -->
-                <div
-                    class="absolute -top-6 -left-6 w-16 h-16 bg-linear-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <span class="text-2xl font-bold text-white">{{ feature.step }}</span>
-                </div>
-
-                <!-- Icon -->
-                <div class="mb-6 mt-4">
+                class="relative bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 group">
+                <!-- Icon and Step Number -->
+                <div class="flex items-center gap-4 mb-4">
+                    <!-- Step Number -->
                     <div
-                        class="w-16 h-16 bg-linear-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        class="shrink-0 w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shadow-md">
+                        <span class="text-xl font-bold text-white">{{ feature.step }}</span>
+                    </div>
+
+                    <!-- Icon -->
+                    <div
+                        class="w-12 h-12 bg-linear-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                         <!-- User Plus Icon -->
                         @if (feature.icon === 'user-plus') {
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
                             </path>
@@ -51,7 +52,7 @@
 
                         <!-- Settings Icon -->
                         @if (feature.icon === 'settings') {
-                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
                             </path>
@@ -62,7 +63,7 @@
 
                         <!-- Sparkles Icon -->
                         @if (feature.icon === 'sparkles') {
-                        <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
                             </path>
@@ -71,7 +72,7 @@
 
                         <!-- Send Icon -->
                         @if (feature.icon === 'send') {
-                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                         </svg>
@@ -80,10 +81,10 @@
                 </div>
 
                 <!-- Content -->
-                <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-3">
                     {{ feature.title }}
                 </h3>
-                <p class="text-lg text-gray-600 leading-relaxed">
+                <p class="text-base text-gray-600 leading-relaxed">
                     {{ feature.description }}
                 </p>
             </div>
@@ -103,7 +104,7 @@
                 </span>
             </a>
             <p class="mt-6 text-gray-600">
-                Join thousands of job seekers finding their perfect match every day.
+                Join thousands of job seekers finding their perfect match every day
             </p>
         </div>
     </div>
