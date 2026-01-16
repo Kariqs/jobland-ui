@@ -4,6 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
+  ActivationInfo,
+  ActivationResponse,
   CreateAccountResponse,
   JwtPayload,
   LoginInfo,
@@ -33,6 +35,12 @@ export class Auth {
   createAccount(userInfo: User): Observable<CreateAccountResponse> {
     return this.http
       .post<CreateAccountResponse>(`${this.apiUrl}/signup`, userInfo)
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
+
+  activateAccount(activationInfo: ActivationInfo): Observable<ActivationResponse> {
+    return this.http
+      .post<ActivationResponse>(`${this.apiUrl}/activate`, activationInfo)
       .pipe(catchError((error) => this.errorHandler.handleError(error)));
   }
 

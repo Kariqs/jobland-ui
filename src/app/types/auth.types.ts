@@ -32,6 +32,15 @@ export interface CreateAccountResponse {
   message: string;
 }
 
+export interface ActivationInfo {
+  email: string;
+  token: string;
+}
+
+export interface ActivationResponse {
+  message: string;
+}
+
 export interface LoginInfo {
   email: string;
   password: string;
