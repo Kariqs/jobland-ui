@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Auth } from '../../../services/auth/auth';
+import { ToastrService } from 'ngx-toastr';
 
 interface ProfessionOption {
   value: string;
@@ -16,7 +18,7 @@ interface ExperienceLevel {
   selector: 'app-signup',
   templateUrl: './signup.html',
   styleUrls: ['./signup.css'],
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
 })
 export class Signup implements OnInit {
   signupForm!: FormGroup;
@@ -52,7 +54,13 @@ export class Signup implements OnInit {
     { value: 'lead', label: 'Lead/Principal (10+ years)' },
   ];
 
-  constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private authService: Auth,
+    private toaster: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -89,7 +97,7 @@ export class Signup implements OnInit {
       // Terms
       agreeToTerms: [false, Validators.requiredTrue],
     });
-    
+
     this.signupForm.get('profession')?.valueChanges.subscribe((value) => {
       const otherProfessionControl = this.signupForm.get('otherProfession');
       if (value === 'other') {
@@ -186,14 +194,19 @@ export class Signup implements OnInit {
 
     this.isLoading = true;
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Form submitted:', this.signupForm.value);
-      this.isLoading = false;
-
-      // Navigate to dashboard or onboarding
-      this.router.navigate(['/dashboard']);
-    }, 2000);
+    const { confirmPassword, ...userInfo } = this.signupForm.value;
+    this.authService.createAccount(userInfo).subscribe({
+      next: (response) => {
+        if (response) {
+          this.toaster.info(response.message);
+          this.router.navigate(['login']);
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        this.toaster.error(error.message);
+        this.isLoading = false;
+      },
+    });
   }
-
 }

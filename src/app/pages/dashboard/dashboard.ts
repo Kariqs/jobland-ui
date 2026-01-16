@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Job, Jobs, JobResponse } from '../../services/jobs/jobs';
+import {Jobs } from '../../services/jobs/jobs';
+import { Job, JobResponse } from '../../types/jobs.types';
 
 @Component({
   selector: 'app-dashboard',
