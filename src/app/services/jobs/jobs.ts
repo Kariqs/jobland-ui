@@ -11,7 +11,24 @@ import { ErrorHandlerService } from '../../utils/error.handler.util';
 export class Jobs {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private errorHandler: ErrorHandlerService) {}
+  constructor(
+    private http: HttpClient,
+    private errorHandler: ErrorHandlerService,
+  ) {}
+
+  getTeaserJobs(query: string = '', page: number = 1): Observable<JobResponse> {
+    const params = new URLSearchParams();
+    if (query.trim()) params.append('query', query.trim());
+    params.append('page', page.toString());
+
+    const url = params.toString()
+      ? `${this.apiUrl}/api/jobs/teaser-jobs?${params.toString()}`
+      : this.apiUrl;
+
+    return this.http
+      .get<JobResponse>(url)
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
 
   getJobs(query: string = '', page: number = 1): Observable<JobResponse> {
     const params = new URLSearchParams();
