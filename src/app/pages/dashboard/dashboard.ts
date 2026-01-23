@@ -173,7 +173,8 @@ export class Dashboard implements OnInit {
 
   applyJob(job: Job): void {
     if (job.applyUrl) {
-      window.open(job.applyUrl, '_blank', 'noopener,noreferrer');
+      const safeUrl = this.sanitizeLinkedIn(job.applyUrl);
+      window.open(safeUrl, '_blank', 'noopener,noreferrer');
     }
     if (!job.applied) {
       job.applied = true;
@@ -214,5 +215,16 @@ export class Dashboard implements OnInit {
       Unknown: { bg: 'bg-gray-50', text: 'text-gray-700', icon: 'fas fa-question' },
     };
     return styles[type as keyof typeof styles] || { bg: '', text: '', icon: 'fas fa-question' };
+  }
+
+  sanitizeLinkedIn(url: string): string {
+    if (!url) return url;
+
+    if (!url.includes('linkedin.com')) return url;
+
+    return url
+      .replace(/^https?:\/\/(www\.)?linkedin\.com\//, 'https://www.linkedin.com/mwlite/')
+      .replace(/(\?|&)trackingId=[^&]+/g, '')
+      .replace(/(\?|&)trk=[^&]+/g, '');
   }
 }
