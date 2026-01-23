@@ -1,9 +1,18 @@
 <div class="min-h-screen p-4 sm:p-6 bg-gray-50">
     <!-- Header -->
     <div class="mb-6 sm:mb-8">
-        <div class="flex items-center gap-2 sm:gap-3 mb-2">
-            <i class="fas fa-briefcase text-2xl sm:text-3xl text-blue-600"></i>
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Job Portal Dashboard</h1>
+        <div class="flex items-center justify-between gap-2 sm:gap-3 mb-2">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <i class="fas fa-briefcase text-2xl sm:text-3xl text-blue-600"></i>
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Job Portal Dashboard</h1>
+            </div>
+
+            <!-- Refresh Jobs Button -->
+            <button (click)="refreshJobs()" [disabled]="isLoading"
+                class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 text-sm sm:text-base transition-colors shrink-0">
+                <i class="fas fa-sync-alt" [class.animate-spin]="isLoading"></i>
+                Refresh
+            </button>
         </div>
         <p class="text-gray-500 text-xs sm:text-sm">Latest job listings</p>
     </div>
@@ -44,11 +53,27 @@
     <!-- Filters -->
     <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8 border border-gray-200">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <div class="relative">
-                <i class="fas fa-search absolute left-3 top-3 sm:top-3.5 text-gray-400 text-sm"></i>
-                <input [(ngModel)]="searchQuery" (keyup.enter)="onSearchSubmit()" type="text"
-                    placeholder="Search by job title or company..."
-                    class="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm border border-gray-300 text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <!-- Search with button and clear icon -->
+            <div class="relative flex items-center gap-2 sm:gap-3 col-span-1 sm:col-span-2 lg:col-span-1">
+                <div class="flex-1 relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                    <input [(ngModel)]="searchQuery" (keyup.enter)="onSearchSubmit()" type="text"
+                        placeholder="Search by job title or company..."
+                        class="w-full pl-9 sm:pl-10 pr-10 py-2 text-sm border border-gray-300 text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    @if (searchQuery) {
+                    <button (click)="clearSearch()"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                        title="Clear search">
+                        <i class="fas fa-times-circle text-lg"></i>
+                    </button>
+                    }
+                </div>
+
+                <button (click)="onSearchSubmit()" [disabled]="isLoading"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2 text-sm transition-colors shrink-0">
+                    <i class="fas fa-search"></i>
+                    <span class="hidden sm:inline">Search</span>
+                </button>
             </div>
 
             <div class="relative">
@@ -93,7 +118,7 @@
     <div class="text-center py-12 sm:py-16 text-red-600 px-4">
         <i class="fas fa-exclamation-triangle text-4xl sm:text-5xl mb-4"></i>
         <p class="text-lg sm:text-xl font-medium">Failed to load jobs</p>
-        <button (click)="fetchJobs()"
+        <button (click)="refreshJobs()"
             class="mt-4 px-5 sm:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm sm:text-base">
             Try Again
         </button>
