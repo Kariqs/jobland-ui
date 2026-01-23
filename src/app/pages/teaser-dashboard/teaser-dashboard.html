@@ -1,83 +1,97 @@
-<div class="min-h-screen p-4 sm:p-6 bg-gray-50">
+<div class="min-h-screen p-4 sm:p-6 bg-gray-50 relative">
+    <!-- Teaser Overlay Banner -->
+    <div
+        class="absolute inset-x-0 top-0 z-10 bg-linear-to-r from-blue-600 to-indigo-600 text-white py-3 sm:py-4 px-4 sm:px-6 shadow-lg flex items-center justify-between flex-wrap gap-3 sm:gap-4">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-base sm:text-lg font-bold">Preview Mode – 3 Latest Jobs</h2>
+            <p class="text-xs sm:text-sm opacity-90 hidden sm:block">Sign in to unlock full listings, advanced filters,
+                more remote jobs &
+                visa-sponsored roles.</p>
+            <p class="text-xs opacity-90 sm:hidden">Sign in to unlock all features</p>
+        </div>
+        <button (click)="login()"
+            class="bg-white text-blue-700 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg text-sm font-medium shadow transition-colors flex items-center gap-2 whitespace-nowrap">
+            <i class="fas fa-sign-in-alt"></i>
+            <span class="hidden sm:inline">Sign In / Create Account</span>
+            <span class="sm:hidden">Sign In</span>
+        </button>
+    </div>
+
     <!-- Header -->
-    <div class="mb-6 sm:mb-8">
+    <div class="mb-6 sm:mb-8 pt-24 sm:pt-20">
         <div class="flex items-center gap-2 sm:gap-3 mb-2">
             <i class="fas fa-briefcase text-2xl sm:text-3xl text-blue-600"></i>
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Job Portal Dashboard</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Job Portal Preview</h1>
         </div>
-        <p class="text-gray-500 text-xs sm:text-sm">Latest job listings</p>
+        <p class="text-gray-500 text-xs sm:text-sm hidden lg:block">Latest opportunities (showing up to 3 most recent)
+        </p>
     </div>
 
     <!-- Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-        <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200">
+        <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 opacity-90">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-xs sm:text-sm mb-1">Total Jobs</p>
-                    <p class="text-2xl sm:text-3xl font-bold text-gray-800">{{ totalJobs }}</p>
+                    <p class="text-gray-500 text-xs sm:text-sm mb-1">Jobs Shown</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-gray-800">{{ jobs.length }}</p>
                 </div>
-                <i class="fas fa-briefcase text-3xl sm:text-4xl text-blue-500 opacity-80"></i>
+                <i class="fas fa-briefcase text-3xl sm:text-4xl text-blue-500 opacity-60"></i>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200">
+        <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 opacity-90">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-500 text-xs sm:text-sm mb-1">Remote Positions</p>
                     <p class="text-2xl sm:text-3xl font-bold text-gray-800">{{ remotePositions }}</p>
                 </div>
-                <i class="fas fa-globe text-3xl sm:text-4xl text-green-500 opacity-80"></i>
+                <i class="fas fa-globe text-3xl sm:text-4xl text-green-500 opacity-60"></i>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 sm:col-span-2 lg:col-span-1">
+        <div
+            class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 opacity-90 sm:col-span-2 lg:col-span-1">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-500 text-xs sm:text-sm mb-1">Posted Today</p>
                     <p class="text-2xl sm:text-3xl font-bold text-gray-800">{{ postedToday }}</p>
                 </div>
-                <i class="fas fa-clock text-3xl sm:text-4xl text-purple-500 opacity-80"></i>
+                <i class="fas fa-clock text-3xl sm:text-4xl text-purple-500 opacity-60"></i>
             </div>
         </div>
     </div>
 
-    <!-- Filters -->
-    <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8 border border-gray-200">
+    <!-- Disabled Filters (visual only) -->
+    <div
+        class="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8 border border-gray-200 opacity-50 pointer-events-none">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div class="relative">
                 <i class="fas fa-search absolute left-3 top-3 sm:top-3.5 text-gray-400 text-sm"></i>
-                <input [(ngModel)]="searchQuery" (keyup.enter)="onSearchSubmit()" type="text"
-                    placeholder="Search by job title or company..."
-                    class="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm border border-gray-300 text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input disabled placeholder="Search jobs (sign in)"
+                    class="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm border border-gray-300 text-gray-400 rounded-lg bg-gray-100 cursor-not-allowed" />
             </div>
 
             <div class="relative">
                 <i class="fas fa-map-marker-alt absolute left-3 top-3 sm:top-3.5 text-gray-400 text-sm"></i>
-                <select [(ngModel)]="selectedLocation" (change)="onFilterChange()"
-                    class="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm border text-gray-700 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
-                    @for (loc of uniqueLocations; track loc) {
-                    <option [value]="loc">{{ loc }}</option>
-                    }
+                <select disabled
+                    class="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm border text-gray-400 border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed appearance-none">
+                    <option>Location (sign in)</option>
                 </select>
             </div>
 
             <div class="relative">
                 <i class="fas fa-passport absolute left-3 top-3 sm:top-3.5 text-gray-400 text-sm"></i>
-                <select [(ngModel)]="selectedVisaType" (change)="onFilterChange()"
-                    class="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm border text-gray-700 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
-                    @for (visa of uniqueVisaTypes; track visa) {
-                    <option [value]="visa">{{ visa }}</option>
-                    }
+                <select disabled
+                    class="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm border text-gray-400 border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed appearance-none">
+                    <option>Visa status (sign in)</option>
                 </select>
             </div>
 
             <div class="relative">
                 <i class="fas fa-globe absolute left-3 top-3 sm:top-3.5 text-gray-400 text-sm"></i>
-                <select [(ngModel)]="selectedSource" (change)="onFilterChange()"
-                    class="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm border text-gray-700 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white">
-                    @for (src of uniqueSources; track src) {
-                    <option [value]="src">{{ src }}</option>
-                    }
+                <select disabled
+                    class="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm border text-gray-400 border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed appearance-none">
+                    <option>Source (sign in)</option>
                 </select>
             </div>
         </div>
@@ -87,22 +101,23 @@
     @if (isLoading) {
     <div class="flex flex-col items-center justify-center py-16 sm:py-20">
         <div class="animate-spin rounded-full h-10 sm:h-12 w-10 sm:w-12 border-b-2 border-blue-600 mb-4"></div>
-        <p class="text-gray-600 text-sm sm:text-base">Loading jobs...</p>
+        <p class="text-gray-600 text-sm sm:text-base">Loading preview jobs...</p>
     </div>
     } @else if (hasError) {
     <div class="text-center py-12 sm:py-16 text-red-600 px-4">
         <i class="fas fa-exclamation-triangle text-4xl sm:text-5xl mb-4"></i>
         <p class="text-lg sm:text-xl font-medium">Failed to load jobs</p>
-        <button (click)="fetchJobs()"
-            class="mt-4 px-5 sm:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm sm:text-base">
-            Try Again
-        </button>
+        <p class="mt-2 text-sm sm:text-base">Please try again later or sign in for full access</p>
     </div>
     } @else if (jobs.length === 0) {
     <div class="text-center py-12 sm:py-16 text-gray-500 px-4">
         <i class="fas fa-search text-4xl sm:text-5xl mb-4 opacity-50"></i>
-        <p class="text-lg sm:text-xl font-medium">No jobs found</p>
-        <p class="mt-2 text-sm sm:text-base">Try adjusting your search or filters</p>
+        <p class="text-lg sm:text-xl font-medium">No recent jobs available right now</p>
+        <p class="mt-2 text-sm sm:text-base">Sign in to see more opportunities and advanced features</p>
+        <button routerLink="/login"
+            class="mt-6 px-6 sm:px-8 py-2.5 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm sm:text-base">
+            Sign In to Explore Jobs
+        </button>
     </div>
     } @else {
     <!-- Desktop Table View -->
@@ -122,7 +137,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Location</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visa
-                            Status</th>
+                        </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Source</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -157,6 +172,8 @@
                                     class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700">
                                     {{ vs }}
                                 </span>
+                                } @empty {
+                                <span class="text-gray-500 text-xs">—</span>
                                 }
                             </div>
                         </td>
@@ -170,16 +187,23 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             <div class="flex items-center gap-3">
-                                <button (click)="applyJob(job)"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
+                                <button (click)="applyJob(job)" [disabled]="!isLoggedIn && !job.applyUrl" [ngClass]="{
+                                  'bg-blue-600 hover:bg-blue-700 text-white': isLoggedIn || job.applyUrl,
+                                  'bg-blue-400 text-white cursor-not-allowed opacity-70': !isLoggedIn && !job.applyUrl
+                                }"
+                                    class="px-4 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
                                     Apply
                                     <i class="fas fa-external-link-alt text-xs"></i>
                                 </button>
 
-                                <button (click)="toggleApplied(job)"
-                                    [ngClass]="job.applied ? 'text-green-600 hover:text-green-700' : 'text-gray-400 hover:text-gray-500'"
-                                    class="transition-colors p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
-                                    title="{{ job.applied ? 'Applied ✓ (click to undo)' : 'Mark as applied' }}">
+                                <button (click)="toggleApplied(job)" [disabled]="!isLoggedIn" [ngClass]="{
+                                  'text-green-600 hover:text-green-700': job.applied && isLoggedIn,
+                                  'text-gray-400 hover:text-gray-500': !job.applied && isLoggedIn,
+                                  'text-gray-400 cursor-not-allowed opacity-60': !isLoggedIn
+                                }" class="transition-colors p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    [title]="isLoggedIn 
+                                  ? (job.applied ? 'Applied ✓ (click to undo)' : 'Mark as applied') 
+                                  : 'Sign in to track your applications'">
                                     <i [ngClass]="job.applied ? 'fas fa-check-circle' : 'far fa-circle'"
                                         class="text-2xl"></i>
                                 </button>
@@ -245,16 +269,23 @@
 
             <!-- Actions -->
             <div class="flex items-center gap-3">
-                <button (click)="applyJob(job)"
-                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                <button (click)="applyJob(job)" [disabled]="!isLoggedIn && !job.applyUrl" [ngClass]="{
+                  'bg-blue-600 hover:bg-blue-700 text-white': isLoggedIn || job.applyUrl,
+                  'bg-blue-400 text-white cursor-not-allowed opacity-70': !isLoggedIn && !job.applyUrl
+                }"
+                    class="flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
                     Apply
                     <i class="fas fa-external-link-alt text-xs"></i>
                 </button>
 
-                <button (click)="toggleApplied(job)"
-                    [ngClass]="job.applied ? 'text-green-600 hover:text-green-700' : 'text-gray-400 hover:text-gray-500'"
-                    class="transition-colors p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
-                    title="{{ job.applied ? 'Applied ✓' : 'Mark as applied' }}">
+                <button (click)="toggleApplied(job)" [disabled]="!isLoggedIn" [ngClass]="{
+                  'text-green-600 hover:text-green-700': job.applied && isLoggedIn,
+                  'text-gray-400 hover:text-gray-500': !job.applied && isLoggedIn,
+                  'text-gray-400 cursor-not-allowed opacity-60': !isLoggedIn
+                }" class="transition-colors p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    [title]="isLoggedIn 
+                  ? (job.applied ? 'Applied ✓' : 'Mark as applied') 
+                  : 'Sign in to track'">
                     <i [ngClass]="job.applied ? 'fas fa-check-circle' : 'far fa-circle'" class="text-2xl"></i>
                 </button>
             </div>
@@ -262,20 +293,12 @@
         }
     </div>
 
-    <!-- Pagination Controls -->
-    <div class="mt-6 flex items-center justify-center gap-3 sm:gap-4 flex-wrap px-4">
-        <button [disabled]="currentPage === 1 || isLoading" (click)="previousPage()"
-            class="px-4 sm:px-6 py-2 text-sm sm:text-base bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-            Previous
-        </button>
-
-        <span class="px-3 sm:px-4 py-2 text-base sm:text-lg font-medium">
-            Page {{ currentPage }} {{ hasMore ? 'of Many' : '' }}
-        </span>
-
-        <button [disabled]="!hasMore || isLoading" (click)="nextPage()"
-            class="px-4 sm:px-6 py-2 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-            Next
+    <!-- Teaser footer message -->
+    <div class="mt-6 sm:mt-8 text-center text-gray-600 px-4">
+        <p class="text-base sm:text-lg font-medium">You're viewing a preview of the 3 most recent jobs</p>
+        <button (click)="login()"
+            class="mt-4 px-6 sm:px-8 py-2.5 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow transition-colors text-sm sm:text-base">
+            Sign in to see all jobs & use filters
         </button>
     </div>
     }
