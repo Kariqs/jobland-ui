@@ -13,6 +13,9 @@
 
             <div class="hidden md:flex items-center gap-10">
                 <nav class="flex items-center gap-10 text-gray-600">
+                    @if (isAuthenticated()) {
+                    <a routerLink="/applications" class="hover:text-gray-900 transition-colors">My Applications</a>
+                    }
                     <a routerLink="#" class="hover:text-gray-900 transition-colors">Pricing</a>
                     <a routerLink="#" class="hover:text-gray-900 transition-colors">About</a>
                 </nav>
@@ -66,6 +69,12 @@
     @if (isMenuOpen()) {
     <div class="md:hidden bg-white/95 border-t border-gray-200/50 shadow-lg">
         <div class="px-6 py-8 space-y-6">
+            @if (isAuthenticated()) {
+            <a routerLink="/applications" (click)="closeMenu()"
+                class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
+                My Applications
+            </a>
+            }
             <a routerLink="#" (click)="closeMenu()"
                 class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
                 Pricing

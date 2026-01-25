@@ -16,3 +16,21 @@ export interface JobResponse {
   jobs: Job[];
   hasMore?: boolean;
 }
+
+export interface SaveJobInfo {
+  jobId: string;
+  title: string;
+  company: string;
+  locationType: 'Remote' | 'Hybrid' | 'Onsite' | 'Unknown';
+  source: string;
+}
+
+export interface SaveJobResponse {
+  message: string;
+  jobId: string;
+}
+
+export interface FetchJobsResponse {
+  message: string;
+  jobs: SaveJobInfo[];
+}
