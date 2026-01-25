@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Jobs } from '../../services/jobs/jobs';
 import { Job, JobResponse } from '../../types/jobs.types';
+import { SaveJobInfo } from '../../types/jobs.types';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +12,7 @@ import { Job, JobResponse } from '../../types/jobs.types';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard implements OnInit {
+export class Dashboard implements OnInit, OnDestroy {
   jobs: Job[] = [];
   isLoading = false;
   hasError = false;
@@ -36,11 +37,15 @@ export class Dashboard implements OnInit {
 
   private readonly STORAGE_KEY = 'job-portal-applied-jobs';
 
-  constructor(private jobsService: Jobs) {}
+  constructor(
+    private jobsService: Jobs,
+  ) {}
 
   ngOnInit() {
     this.fetchJobs();
   }
+
+  ngOnDestroy() {}
 
   fetchJobs(page: number = this.currentPage) {
     this.isLoading = true;
@@ -60,8 +65,12 @@ export class Dashboard implements OnInit {
           this.hasMore = response.jobs.length === this.pageSize;
           this.totalPages = this.hasMore ? this.currentPage + 10 : this.currentPage;
 
+          this.loadAppliedStatus();
           this.updateStats();
           this.applyFilters();
+
+          // Placeholder for future server sync when endpoint is available
+          // this.syncWithServerInBackground();
         } else {
           this.jobs = [];
           this.resetStats();
@@ -73,8 +82,56 @@ export class Dashboard implements OnInit {
         this.isLoading = false;
       },
     });
+  }
 
-    this.loadAppliedStatus();
+  private loadAppliedStatus() {
+    const saved = localStorage.getItem(this.STORAGE_KEY);
+    if (!saved) return;
+
+    try {
+      const map: Record<string, boolean> = JSON.parse(saved);
+      this.jobs.forEach((job) => {
+        if (map[job.id] === true) {
+          job.applied = true;
+        }
+      });
+    } catch {}
+  }
+
+  private saveAppliedStatus() {
+    const map: Record<string, boolean> = {};
+    this.jobs.forEach((job) => {
+      if (job.applied) {
+        map[job.id] = true;
+      }
+    });
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(map));
+  }
+
+  applyJob(job: Job): void {
+    if (job.applyUrl) {
+      const safeUrl = this.sanitizeLinkedIn(job.applyUrl);
+      window.open(safeUrl, '_blank', 'noopener,noreferrer');
+    }
+
+    if (job.applied) return;
+
+    job.applied = true;
+    this.saveAppliedStatus();
+
+    const jobInfo: SaveJobInfo = {
+      jobId: job.id,
+      title: job.title || 'Untitled',
+      company: job.company || 'Unknown',
+      locationType: job.locationType || 'Unknown',
+      source: job.source || 'Unknown',
+    };
+
+    this.jobsService.saveAppliedJob(jobInfo).subscribe({
+      error: () => {
+       
+      },
+    });
   }
 
   refreshJobs() {
@@ -146,40 +203,6 @@ export class Dashboard implements OnInit {
 
   onFilterChange() {
     this.applyFilters();
-  }
-
-  private loadAppliedStatus() {
-    const saved = localStorage.getItem(this.STORAGE_KEY);
-    if (saved) {
-      try {
-        const map: { [id: string]: boolean } = JSON.parse(saved);
-        this.jobs.forEach((job) => {
-          if (map[job.id] !== undefined) job.applied = map[job.id];
-        });
-      } catch {}
-    }
-  }
-
-  toggleApplied(job: Job): void {
-    job.applied = !job.applied;
-    this.saveAppliedStatus();
-  }
-
-  private saveAppliedStatus() {
-    const map: { [id: string]: boolean } = {};
-    this.jobs.forEach((job) => (map[job.id] = job.applied));
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(map));
-  }
-
-  applyJob(job: Job): void {
-    if (job.applyUrl) {
-      const safeUrl = this.sanitizeLinkedIn(job.applyUrl);
-      window.open(safeUrl, '_blank', 'noopener,noreferrer');
-    }
-    if (!job.applied) {
-      job.applied = true;
-      this.saveAppliedStatus();
-    }
   }
 
   get uniqueLocations(): string[] {

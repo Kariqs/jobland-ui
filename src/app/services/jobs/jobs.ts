@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { JobResponse } from '../../types/jobs.types';
+import {
+  FetchJobsResponse,
+  JobResponse,
+  SaveJobInfo,
+  SaveJobResponse,
+} from '../../types/jobs.types';
 import { ErrorHandlerService } from '../../utils/error.handler.util';
 
 @Injectable({
@@ -39,6 +44,18 @@ export class Jobs {
 
     return this.http
       .get<JobResponse>(url)
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
+
+  saveAppliedJob(jobInfo: SaveJobInfo): Observable<SaveJobResponse> {
+    return this.http
+      .post<SaveJobResponse>(`${this.apiUrl}/api/jobs/save-job`, jobInfo)
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
+
+  fetchSavedJobs(): Observable<FetchJobsResponse> {
+    return this.http
+      .get<FetchJobsResponse>(`${this.apiUrl}/api/jobs/fetch-jobs`)
       .pipe(catchError((error) => this.errorHandler.handleError(error)));
   }
 }

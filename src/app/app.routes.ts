@@ -7,6 +7,7 @@ import { Login } from './pages/auth/login/login';
 import { authGuard } from './services/guards/auth-guard';
 import { AccountActivationComponent } from './pages/auth/activate/activate';
 import { JobTeaserComponent } from './pages/teaser-dashboard/teaser-dashboard';
+import { Applications } from './pages/applications/applications';
 
 export const routes: Routes = [
   { path: 'signup', component: Signup },
@@ -15,5 +16,6 @@ export const routes: Routes = [
   { path: '', component: Home },
   { path: 'jobs', component: JobTeaserComponent },
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
+  { path: 'applications', component: Applications, canActivate: [authGuard] },
   { path: 'features', component: Features },
 ];
