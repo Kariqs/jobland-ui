@@ -8,6 +8,7 @@ import { authGuard } from './services/guards/auth-guard';
 import { AccountActivationComponent } from './pages/auth/activate/activate';
 import { JobTeaserComponent } from './pages/teaser-dashboard/teaser-dashboard';
 import { Applications } from './pages/applications/applications';
+import { ResumeUpload } from './pages/my-resume/my-resume';
 
 export const routes: Routes = [
   { path: 'signup', component: Signup },
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'jobs', component: JobTeaserComponent },
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
   { path: 'applications', component: Applications, canActivate: [authGuard] },
+  { path: 'generate-resume', component: ResumeUpload, canActivate: [authGuard] },
   { path: 'features', component: Features },
 ];

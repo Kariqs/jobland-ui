@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between h-16 md:h-20">
             <div (click)="goHome()" class="flex items-center cursor-pointer gap-3">
                 <div
-                    class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center font-bold text-white text-xl shadow-lg">
+                    class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center font-bold text-white text-xl shadow-lg">
                     J
                 </div>
                 <span class="text-2xl md:text-3xl font-extrabold text-gray-800">
@@ -16,6 +16,9 @@
                     @if (isAuthenticated()) {
                     <a routerLink="/applications" class="hover:text-gray-900 transition-colors">My Applications</a>
                     }
+                    @if (isAuthenticated()) {
+                    <a routerLink="/generate-resume" class="hover:text-gray-900 transition-colors">My Resumes</a>
+                    }
                     <a routerLink="#" class="hover:text-gray-900 transition-colors">Pricing</a>
                     <a routerLink="#" class="hover:text-gray-900 transition-colors">About</a>
                 </nav>
@@ -26,14 +29,14 @@
                         Sign In
                     </button>
                     <button (click)="getStarted()"
-                        class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all">
+                        class="px-6 py-2.5 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all">
                         Get Started
                     </button>
                 </div>
                 } @else {
                 <div class="relative user-avatar-container" (document:click)="closeDropdownIfOutside($event)">
                     <button (click)="toggleDropdown()"
-                        class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold flex items-center justify-center shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                        class="w-10 h-10 rounded-full bg-linear-to-br from-blue-600 to-purple-600 text-white font-bold flex items-center justify-center shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                         title="Account">
                         {{ getInitials() }}
                     </button>
@@ -73,6 +76,12 @@
             <a routerLink="/applications" (click)="closeMenu()"
                 class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
                 My Applications
+            </a>
+            }
+            @if (isAuthenticated()) {
+            <a routerLink="/generate-resume" (click)="closeMenu()"
+                class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
+                My Resumes
             </a>
             }
             <a routerLink="#" (click)="closeMenu()"
