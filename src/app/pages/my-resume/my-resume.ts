@@ -9,19 +9,9 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-interface ResumeListItem {
-  id: string;
-  title: string;
-  originalFileName: string;
-  parsedName?: string;
-  createdAt: string;
-}
-
-interface GetResumeResponse {
-  messsage: string;
-  resumes: ResumeListItem[];
-}
+import { Router } from '@angular/router';
+import { GetResumesResponse, ResumeListItem } from '../../types/resume.types';
+import { ResumeService } from '../../services/resume/resume-service';
 
 @Component({
   selector: 'app-resume-upload',
@@ -41,6 +31,8 @@ export class ResumeUpload implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
+    private router: Router,
+    private resumeService: ResumeService,
   ) {
     this.uploadForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
@@ -84,7 +76,6 @@ export class ResumeUpload implements OnInit {
           this.isUploading = false;
           this.uploadSuccess = true;
           this.uploadForm.reset();
-          // Refresh list
           this.loadUserResumes();
           setTimeout(() => (this.uploadSuccess = false), 5000);
         },
@@ -97,14 +88,13 @@ export class ResumeUpload implements OnInit {
 
   loadUserResumes(): void {
     this.isLoadingResumes = true;
-    this.http.get<GetResumeResponse>(`${environment.apiUrl}/api/resumes/get-resumes`).subscribe({
+    this.resumeService.getResumesByUserId().subscribe({
       next: (response) => {
         this.resumes = response.resumes;
         this.isLoadingResumes = false;
       },
       error: () => {
         this.isLoadingResumes = false;
-        // You can show error toast/notification here
       },
     });
   }
@@ -115,5 +105,13 @@ export class ResumeUpload implements OnInit {
       month: 'short',
       day: 'numeric',
     });
+  }
+
+  editResume(resumeId: string) {
+    this.router.navigate(['edit-resume'], { queryParams: { id: resumeId } });
+  }
+
+  previewResume(resumeId: string) {
+    this.router.navigate(['preview-resume'], { queryParams: { id: resumeId } });
   }
 }
