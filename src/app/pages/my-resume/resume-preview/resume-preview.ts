@@ -150,6 +150,6 @@ export class ResumePreviewComponent implements OnInit {
   }
 
   onBack(): void {
-    this.router.navigate(['/resumes']);
+    this.router.navigate(['generate-resume']);
   }
 }
