@@ -118,4 +118,24 @@ export class ResumeUpload implements OnInit {
   tailorResume(resumeId: string, resumeTitle: string) {
     this.router.navigate(['tailor-resume'], { queryParams: { id: resumeId, title: resumeTitle } });
   }
+
+  deleteResume(resumeId: string, resumeTitle: string) {
+    const confirmed = confirm(
+      `Are you sure you want to delete "${resumeTitle}"?\n\nThis action cannot be undone.`,
+    );
+
+    if (!confirmed) return;
+
+    this.resumeService.deleteResume(resumeId).subscribe({
+      next: (response) => {
+        this.resumes = this.resumes.filter((r) => r._id !== resumeId);
+        this.isLoadingResumes = false;
+      },
+      error: (err) => {
+        this.isLoadingResumes = false;
+        alert(err.error?.error || 'Failed to delete resume');
+        console.error('Delete error:', err);
+      },
+    });
+  }
 }

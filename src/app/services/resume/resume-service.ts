@@ -49,4 +49,13 @@ export class ResumeService {
       .post<TailorResumeResponse>(`${this.apiUrl}/api/resumes/tailor-resume`, tailorResumeInfo)
       .pipe(catchError((error) => this.errorHandler.handleError(error)));
   }
+
+  deleteResume(resumeId: string): Observable<{ message: string; deletedResumeId: string }> {
+    return this.http
+      .delete<{
+        message: string;
+        deletedResumeId: string;
+      }>(`${this.apiUrl}/api/resumes/delete-resume/${resumeId}`)
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
 }
