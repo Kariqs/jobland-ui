@@ -6,6 +6,8 @@ import {
   GetResumeResponse,
   GetResumesResponse,
   Resume,
+  TailorResumeInfo,
+  TailorResumeResponse,
   UpdateResumeResponse,
 } from '../../types/resume.types';
 import { catchError, Observable } from 'rxjs';
@@ -39,6 +41,12 @@ export class ResumeService {
   ): Observable<UpdateResumeResponse> {
     return this.http
       .put<UpdateResumeResponse>(`${this.apiUrl}/api/resumes/update-resume/${resumeId}`, resumeInfo)
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
+
+  tailorResume(tailorResumeInfo: TailorResumeInfo): Observable<TailorResumeResponse> {
+    return this.http
+      .post<TailorResumeResponse>(`${this.apiUrl}/api/resumes/tailor-resume`, tailorResumeInfo)
       .pipe(catchError((error) => this.errorHandler.handleError(error)));
   }
 }
