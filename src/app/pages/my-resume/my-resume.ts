@@ -114,4 +114,8 @@ export class ResumeUpload implements OnInit {
   previewResume(resumeId: string) {
     this.router.navigate(['preview-resume'], { queryParams: { id: resumeId } });
   }
+
+  tailorResume(resumeId: string, resumeTitle: string) {
+    this.router.navigate(['tailor-resume'], { queryParams: { id: resumeId, title: resumeTitle } });
+  }
 }

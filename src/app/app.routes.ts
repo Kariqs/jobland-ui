@@ -11,6 +11,7 @@ import { Applications } from './pages/applications/applications';
 import { ResumeUpload } from './pages/my-resume/my-resume';
 import { EditResume } from './pages/my-resume/edit-resume/edit-resume';
 import { ResumePreviewComponent } from './pages/my-resume/resume-preview/resume-preview';
+import { TailorResumeComponent } from './pages/my-resume/tailor-resume/tailor-resume';
 
 export const routes: Routes = [
   { path: 'signup', component: Signup },
@@ -23,5 +24,6 @@ export const routes: Routes = [
   { path: 'generate-resume', component: ResumeUpload, canActivate: [authGuard] },
   { path: 'edit-resume', component: EditResume, canActivate: [authGuard] },
   { path: 'preview-resume', component: ResumePreviewComponent, canActivate: [authGuard] },
+  { path: 'tailor-resume', component: TailorResumeComponent, canActivate: [authGuard] },
   { path: 'features', component: Features },
 ];

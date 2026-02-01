@@ -10,7 +10,7 @@ import { provideToastr } from 'ngx-toastr';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { tokenInterceptor } from './interceptors/auth-interceptor';
+import { tokenInterceptor } from './services/interceptors/auth-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [

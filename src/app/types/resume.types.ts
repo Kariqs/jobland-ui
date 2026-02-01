@@ -64,3 +64,20 @@ export interface UpdateResumeResponse {
   message: string;
   resumeId: string;
 }
+
+export interface TailorResumeInfo {
+  resumeId: string;
+  resumeTitle: string;
+  jobDescription: string;
+}
+
+export interface TailorResumeResponse {
+  message: string;
+  resume: {
+    id: string;
+    title: string;
+    originalFileName: string;
+    parsedName: string;
+    createdAt: string;
+  };
+}

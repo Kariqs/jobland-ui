@@ -1,4 +1,3 @@
-// resume-preview.component.ts
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import html2canvas from 'html2canvas';
@@ -16,6 +15,7 @@ export class ResumePreviewComponent implements OnInit {
 
   resume!: Resume;
   isGeneratingPDF: boolean = false;
+  isLoadingResume: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,10 +35,13 @@ export class ResumePreviewComponent implements OnInit {
   loadResume(id: string): void {
     this.resumeService.getResumeByUserAndResumeId(id).subscribe({
       next: (response) => {
+        this.isLoadingResume = true;
         this.resume = response.resume;
+        this.isLoadingResume = false;
       },
       error: (error) => {
         console.error('Error loading resume:', error);
+        this.isLoadingResume = false;
       },
     });
   }
