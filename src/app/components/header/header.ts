@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Auth, UserInfo } from '../../services/auth/auth';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -82,5 +83,9 @@ export class Header {
     if (!target.closest('.user-avatar-container')) {
       this.isDropdownOpen.set(false);
     }
+  }
+
+  myResumes() {
+    window.open(environment.resumesUrl, '_blank');
   }
 }
