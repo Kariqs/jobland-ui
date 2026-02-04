@@ -17,7 +17,7 @@
                     <a routerLink="/applications" class="hover:text-gray-900 transition-colors">My Applications</a>
                     }
                     @if (isAuthenticated()) {
-                    <a routerLink="/generate-resume" class="hover:text-gray-900 transition-colors">My Resumes</a>
+                    <a (click)="myResumes()" class="hover:text-gray-900 transition-colors">My Resumes</a>
                     }
                     <a routerLink="#" class="hover:text-gray-900 transition-colors">Pricing</a>
                     <a routerLink="#" class="hover:text-gray-900 transition-colors">About</a>
@@ -79,8 +79,7 @@
             </a>
             }
             @if (isAuthenticated()) {
-            <a routerLink="/generate-resume" (click)="closeMenu()"
-                class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
+            <a (click)="myResumes()" class="block text-lg text-gray-600 hover:text-gray-900 transition-colors">
                 My Resumes
             </a>
             }
